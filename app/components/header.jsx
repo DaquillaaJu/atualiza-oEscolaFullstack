@@ -5,8 +5,7 @@ export default function Header() {
     { href: "/", label: "início" },
     { href: "/principal", label: "sobre" },
     { href: "/cadaaluno", label: "alunos" },
-    { href: "/listaaluno", label: "frequência" },
-    { href: "/notaaluno", label: "matérias" },
+    { href: "/listaaluno", label: "frequência /lista de alunos" },
     { href: "/listanota", label: "notas" },
   ];
 

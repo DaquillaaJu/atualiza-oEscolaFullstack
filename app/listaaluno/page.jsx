@@ -1,24 +1,34 @@
-import Link from "next/link";
+'use client';
+
+import {useState} from "react";
 import Header from "../components/header";
 
 export default function ListaAluno() {
-  return (
-    <>
-      <Header />
-      <main className="page-shell compact-shell">
-        <section className="content-panel">
-          <h2>Lista de Alunos</h2>
-          <p>
-            Aqui será exibida a relação completa dos alunos cadastrados, com acesso a
-            informações gerais e filtros por turma, nome ou situação acadêmica.
-          </p>
-          <div className="action-row" style={{ marginTop: "1.5rem" }}>
-            <Link href="/" className="primary-btn">
-              Voltar para Início
-            </Link>
-          </div>
-        </section>
-      </main>
-    </>
-  );
+    return (
+        <>
+        <Header />
+       <h2>Lista de alunos</h2>
+       <table>
+        <thead>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Idade</th>
+            <th>Série</th>
+            <th>RA</th>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Julia Daquila</td>
+                <td>18</td>
+                <td>3A</td>
+                <td>2918</td>
+                
+            </tr>
+        </tbody>
+       </table>
+    
+        </>
+    )
 }

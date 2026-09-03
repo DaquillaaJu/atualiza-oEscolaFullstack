@@ -562,23 +562,6 @@ a {
   content: "espaço para fotografia 01";
 }
 
-.visual-materias {
-  border-radius: 40px 5px 40px 5px;
-  background:
-    radial-gradient(ellipse at 50% 64%, rgba(76, 111, 83, 0.72) 0 29%, transparent 29.5%),
-    linear-gradient(135deg, #d9d9ba 0%, #abbc9e 45%, #e6d8c5 100%);
-}
-
-.visual-materias::before {
-  background:
-    repeating-linear-gradient(90deg, transparent 0 14%, rgba(255, 246, 220, 0.34) 14% 15%, transparent 15% 28%),
-    radial-gradient(circle at 25% 35%, rgba(233, 190, 194, 0.88) 0 8%, transparent 8.7%),
-    radial-gradient(circle at 73% 32%, rgba(247, 220, 188, 0.76) 0 9%, transparent 9.7%);
-}
-
-.visual-materias::after {
-  content: "espaço para fotografia 02";
-}
 
 .visual-desempenho {
   border-radius: 5px 40px 5px 40px;
@@ -1757,5 +1740,490 @@ a {
     .student-count {
       align-self: flex-start;
     }
+  }
+}
+
+/* Estilos condicionais da lista de alunos; nenhuma outra rota usa este escopo. */
+body:has(> table) {
+  --list-paper: #fbf7ed;
+  --list-paper-soft: #f2ecdd;
+  --list-ink: #234b43;
+  --list-muted: #68766e;
+  --list-sage: #4d766d;
+  --list-sage-soft: #c7d3b8;
+  --list-pink: #f2d6d4;
+  --list-line: rgba(91, 108, 87, 0.24);
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 8% 14%, rgba(218, 197, 174, 0.24), transparent 22rem),
+    radial-gradient(circle at 94% 82%, rgba(199, 213, 188, 0.34), transparent 23rem),
+    repeating-linear-gradient(0deg, rgba(117, 96, 75, 0.045) 0 1px, transparent 1px 7px),
+    var(--list-paper-soft);
+  color: var(--list-ink);
+}
+
+body:has(> table)::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.46;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.5), transparent 23%),
+    radial-gradient(circle at 72% 62%, rgba(189, 168, 134, 0.12), transparent 25%);
+}
+
+body:has(> table) > h2 {
+  position: relative;
+  width: min(calc(100% - 2rem), 940px);
+  margin: clamp(3rem, 8vw, 6.4rem) auto 2.35rem;
+  color: var(--list-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.5rem, 6vw, 5.15rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.07em;
+  line-height: 0.98;
+  text-align: center;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+body:has(> table) > h2::before {
+  content: "✽  arquivo vivo · turma 2026  ✽";
+  display: block;
+  margin-bottom: 0.9rem;
+  color: var(--list-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.58rem, 1vw, 0.7rem);
+  font-style: normal;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+body:has(> table) > h2::after {
+  content: "";
+  position: absolute;
+  right: 22%;
+  bottom: -1.1rem;
+  left: 22%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--list-line), transparent);
+}
+
+body:has(> table) > table {
+  position: relative;
+  width: min(calc(100% - 2rem), 940px);
+  margin: 0 auto clamp(3rem, 8vw, 6rem);
+  overflow: hidden;
+  border: 1px solid var(--list-line);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 5px 22px 5px 22px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 42%),
+    rgba(255, 253, 247, 0.82);
+  box-shadow:
+    0 22px 48px rgba(68, 75, 57, 0.14),
+    0 0 0 8px rgba(255, 249, 239, 0.22);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body:has(> table) > table::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 10px;
+  pointer-events: none;
+  border: 1px solid rgba(91, 108, 87, 0.12);
+  border-radius: 2px 15px 2px 15px;
+}
+
+body:has(> table) > table thead {
+  color: #fffaf0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent),
+    var(--list-sage);
+}
+
+body:has(> table) > table th {
+  position: relative;
+  z-index: 3;
+  padding: 1rem clamp(0.65rem, 2.2vw, 1.25rem);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: clamp(0.65rem, 1.25vw, 0.77rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+body:has(> table) > table th:last-child {
+  border-right: 0;
+}
+
+body:has(> table) > table tbody tr {
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+body:has(> table) > table tbody tr:nth-child(even) {
+  background: rgba(199, 211, 184, 0.16);
+}
+
+body:has(> table) > table tbody tr:hover {
+  background: rgba(242, 214, 212, 0.38);
+  transform: translateX(3px);
+}
+
+body:has(> table) > table td {
+  padding: 1.1rem clamp(0.65rem, 2.2vw, 1.25rem);
+  color: var(--list-muted);
+  border-top: 1px solid var(--list-line);
+  font-size: clamp(0.82rem, 1.4vw, 1rem);
+  line-height: 1.45;
+  text-align: left;
+}
+
+body:has(> table) > table td:first-child {
+  width: 10%;
+  color: var(--list-sage);
+  font-style: italic;
+  text-align: center;
+}
+
+body:has(> table) > table td:nth-child(3) {
+  color: var(--list-ink);
+  text-align: center;
+}
+
+body:has(> table) > table td:nth-child(4) {
+  color: var(--list-ink);
+  font-style: italic;
+}
+
+body:has(> table) > table td:last-child {
+  color: var(--list-ink);
+  letter-spacing: 0.06em;
+}
+
+/* Estilos condicionais da página Sobre; classes genéricas ficam isoladas da rota. */
+body:has(> main.page-shell > .hero-panel) {
+  --about-paper: #fbf7ed;
+  --about-paper-soft: #f2ecdd;
+  --about-ink: #234b43;
+  --about-muted: #68766e;
+  --about-sage: #4d766d;
+  --about-sage-soft: #c7d3b8;
+  --about-pink: #e6b9bf;
+  --about-line: rgba(91, 108, 87, 0.24);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(218, 197, 174, 0.23), transparent 21rem),
+    radial-gradient(circle at 93% 77%, rgba(199, 213, 188, 0.32), transparent 22rem),
+    repeating-linear-gradient(0deg, rgba(117, 96, 75, 0.045) 0 1px, transparent 1px 7px),
+    var(--about-paper-soft);
+  color: var(--about-ink);
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell {
+  position: relative;
+  display: grid;
+  min-height: calc(100vh - 74px);
+  place-items: center;
+  padding: clamp(1rem, 4vw, 4rem) clamp(0.75rem, 4vw, 3.75rem) 5rem;
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell::before,
+body:has(> main.page-shell > .hero-panel) > main.page-shell::after {
+  position: absolute;
+  color: rgba(77, 118, 109, 0.46);
+  font-family: Georgia, "Times New Roman", serif;
+  pointer-events: none;
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell::before {
+  content: "✽";
+  top: 12%;
+  left: 10%;
+  font-size: clamp(1.5rem, 4vw, 3.25rem);
+  transform: rotate(-14deg);
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell::after {
+  content: "✽";
+  right: 10%;
+  bottom: 15%;
+  font-size: clamp(1.25rem, 3vw, 2.8rem);
+  transform: rotate(18deg);
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell > .hero-panel {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 960px);
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(3.5rem, 7vw, 6.2rem) clamp(1.25rem, 8vw, 7rem) clamp(3rem, 6vw, 5rem);
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.62), transparent 17rem),
+    repeating-linear-gradient(
+      90deg,
+      rgba(225, 231, 198, 0.38) 0 54px,
+      rgba(248, 246, 224, 0.48) 54px 100px
+    ),
+    var(--about-paper);
+  border: 1px solid var(--about-line);
+  border-radius: 7px 26px 7px 26px;
+  box-shadow:
+    0 26px 60px rgba(68, 75, 57, 0.14),
+    0 0 0 8px rgba(255, 249, 239, 0.22);
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell > .hero-panel::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 14px;
+  pointer-events: none;
+  border: 1px solid rgba(91, 108, 87, 0.16);
+  border-radius: 2px 19px 2px 19px;
+}
+
+body:has(> main.page-shell > .hero-panel) > main.page-shell > .hero-panel::after {
+  content: "✽  escola, cuidado e futuro  ✽";
+  position: absolute;
+  top: 1.45rem;
+  left: 50%;
+  padding: 0 0.8rem;
+  color: var(--about-muted);
+  background: var(--about-paper);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.61rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-logo {
+  position: relative;
+  display: inline-block;
+  margin-bottom: clamp(2rem, 5vw, 3.6rem);
+  color: var(--about-sage);
+  font-family: "Segoe Print", "Bradley Hand", cursive;
+  font-size: clamp(3.4rem, 10vw, 7.8rem);
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.1em;
+  line-height: 0.8;
+  text-shadow: 0 3px 0 rgba(255, 255, 255, 0.7);
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-logo span {
+  color: var(--about-pink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.38em;
+  font-style: normal;
+  letter-spacing: -0.05em;
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-logo::before {
+  content: "bem-vindo ao nosso caderno";
+  display: block;
+  margin-bottom: 0.85rem;
+  color: var(--about-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.58rem, 1vw, 0.72rem);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.27em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-logo::after {
+  content: "✦";
+  position: absolute;
+  right: -2.4rem;
+  bottom: -0.35rem;
+  color: var(--about-pink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  letter-spacing: 0;
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-copy {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-copy h1 {
+  margin: 0;
+  color: var(--about-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4.6vw, 3.8rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+}
+
+body:has(> main.page-shell > .hero-panel) .hero-copy p {
+  max-width: 51ch;
+  margin: 1.3rem auto 0;
+  color: var(--about-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.94rem, 1.7vw, 1.12rem);
+  line-height: 1.75;
+}
+
+body:has(> main.page-shell > .hero-panel) .action-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: clamp(1.8rem, 4vw, 2.8rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--about-line);
+}
+
+body:has(> main.page-shell > .hero-panel) .primary-btn,
+body:has(> main.page-shell > .hero-panel) .secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0.72rem 1.25rem;
+  border-radius: 999px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+body:has(> main.page-shell > .hero-panel) .primary-btn {
+  color: #fffaf0;
+  background: var(--about-sage);
+  border: 1px solid var(--about-sage);
+}
+
+body:has(> main.page-shell > .hero-panel) .secondary-btn {
+  color: var(--about-ink);
+  background: rgba(255, 253, 247, 0.56);
+  border: 1px solid rgba(77, 118, 109, 0.35);
+}
+
+body:has(> main.page-shell > .hero-panel) .primary-btn:hover,
+body:has(> main.page-shell > .hero-panel) .secondary-btn:hover {
+  transform: translateY(-2px);
+}
+
+body:has(> main.page-shell > .hero-panel) .primary-btn:hover {
+  background: var(--about-ink);
+  border-color: var(--about-ink);
+}
+
+body:has(> main.page-shell > .hero-panel) .secondary-btn:hover {
+  color: #fffaf0;
+  background: var(--about-sage);
+}
+
+body:has(> table) > table th:focus-visible,
+body:has(> table) > table td:focus-visible,
+body:has(> main.page-shell > .hero-panel) a:focus-visible {
+  outline: 3px solid rgba(77, 118, 109, 0.45);
+  outline-offset: 3px;
+}
+
+@media (max-width: 680px) {
+  body:has(> table) > h2 {
+    width: min(calc(100% - 1.5rem), 940px);
+    margin-top: 3rem;
+    margin-bottom: 1.8rem;
+    font-size: clamp(2.35rem, 13vw, 4rem);
+  }
+
+  body:has(> table) > h2::before {
+    font-size: 0.52rem;
+    letter-spacing: 0.13em;
+  }
+
+  body:has(> table) > table {
+    display: block;
+    width: min(calc(100% - 1rem), 940px);
+    overflow-x: auto;
+    border-radius: 4px 16px 4px 16px;
+  }
+
+  body:has(> table) > table thead,
+  body:has(> table) > table tbody {
+    width: 650px;
+  }
+
+  body:has(> table) > table th,
+  body:has(> table) > table td {
+    padding: 0.9rem 0.8rem;
+  }
+
+  body:has(> main.page-shell > .hero-panel) > main.page-shell {
+    min-height: calc(100vh - 130px);
+    padding: 1.25rem 0.65rem 3rem;
+  }
+
+  body:has(> main.page-shell > .hero-panel) > main.page-shell > .hero-panel {
+    padding: 3.75rem 1.1rem 2.6rem;
+    border-radius: 4px 18px 4px 18px;
+  }
+
+  body:has(> main.page-shell > .hero-panel) > main.page-shell > .hero-panel::before {
+    inset: 8px;
+  }
+
+  body:has(> main.page-shell > .hero-panel) > main.page-shell > .hero-panel::after {
+    top: 0.95rem;
+    font-size: 0.48rem;
+    letter-spacing: 0.12em;
+  }
+
+  body:has(> main.page-shell > .hero-panel) .hero-logo {
+    margin-bottom: 2.5rem;
+    font-size: clamp(3.2rem, 20vw, 5rem);
+  }
+
+  body:has(> main.page-shell > .hero-panel) .hero-logo::before {
+    font-size: 0.51rem;
+    letter-spacing: 0.13em;
+  }
+
+  body:has(> main.page-shell > .hero-panel) .hero-logo::after {
+    right: -1rem;
+    font-size: 1rem;
+  }
+
+  body:has(> main.page-shell > .hero-panel) .hero-copy h1 {
+    font-size: clamp(1.75rem, 9vw, 2.7rem);
+  }
+
+  body:has(> main.page-shell > .hero-panel) .hero-copy p {
+    font-size: 0.9rem;
+  }
+
+  body:has(> main.page-shell > .hero-panel) .action-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body:has(> main.page-shell > .hero-panel) .primary-btn,
+  body:has(> main.page-shell > .hero-panel) .secondary-btn {
+    width: 100%;
   }
 }

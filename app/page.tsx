@@ -11,14 +11,6 @@ const posts = [
     href: "/listaaluno",
   },
   {
-    slug: "materias",
-    date: "semana letiva",
-    title: "matérias em destaque",
-    description:
-      "As turmas seguem com foco em matemática, português, ciências, história, informática e projetos de formação profissional e cidadania.",
-    href: "/notaaluno",
-  },
-  {
     slug: "desempenho",
     date: "avaliações",
     title: "desempenho e acompanhamento",
@@ -30,7 +22,6 @@ const posts = [
 
 const sidebarItems = [
   "faltas: 2% da turma",
-  "matérias: 6 disciplinas ativas",
   "presença: média 96%",
   "projeto: robótica e tecnologia",
   "apoio: orientação escolar",
@@ -53,8 +44,7 @@ export default function Home() {
             <Link href="/">início</Link>
             <Link href="/principal">sobre</Link>
             <Link href="/cadaaluno">alunos</Link>
-            <Link href="/listaaluno">frequência</Link>
-            <Link href="/notaaluno">matérias</Link>
+            <Link href="/listaaluno">frequência /lista de alunos</Link>
             <Link href="/listanota">notas</Link>
           </nav>
 
