@@ -2227,3 +2227,363 @@ body:has(> main.page-shell > .hero-panel) a:focus-visible {
     width: 100%;
   }
 }
+
+/* Estilos condicionais da página de lançamento de notas. */
+@layer components {
+  body:has(> form) {
+    --grades-paper: #fbf7ed;
+    --grades-paper-soft: #f2ecdd;
+    --grades-ink: #234b43;
+    --grades-muted: #68766e;
+    --grades-sage: #4d766d;
+    --grades-sage-soft: #c7d3b8;
+    --grades-pink: #e6b9bf;
+    --grades-line: rgba(91, 108, 87, 0.24);
+    --grades-shadow: rgba(68, 75, 57, 0.14);
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+      radial-gradient(circle at 7% 15%, rgba(218, 197, 174, 0.24), transparent 22rem),
+      radial-gradient(circle at 94% 80%, rgba(199, 213, 188, 0.34), transparent 23rem),
+      repeating-linear-gradient(0deg, rgba(117, 96, 75, 0.045) 0 1px, transparent 1px 7px),
+      var(--grades-paper-soft);
+    color: var(--grades-ink);
+  }
+
+  body:has(> form)::before {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.48;
+    background:
+      radial-gradient(circle at 28% 27%, rgba(255, 255, 255, 0.52), transparent 24%),
+      radial-gradient(circle at 72% 63%, rgba(189, 168, 134, 0.12), transparent 25%);
+  }
+
+  body:has(> form) > h2 {
+    width: min(calc(100% - 2rem), 1080px);
+    margin-right: auto;
+    margin-left: auto;
+    color: var(--grades-ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+  }
+
+  body:has(> form) > h2:first-of-type {
+    position: relative;
+    margin-top: clamp(3rem, 7vw, 5.7rem);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
+    font-style: italic;
+    letter-spacing: -0.07em;
+    line-height: 0.98;
+    text-align: center;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.58);
+  }
+
+  body:has(> form) > h2:first-of-type::before {
+    content: "✽  registro escolar · turma 2026  ✽";
+    display: block;
+    margin-bottom: 0.9rem;
+    color: var(--grades-muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(0.58rem, 1vw, 0.7rem);
+    font-style: normal;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  body:has(> form) > h2:first-of-type::after {
+    content: "";
+    position: absolute;
+    right: 20%;
+    bottom: -1.25rem;
+    left: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--grades-line), transparent);
+  }
+
+  body:has(> form) > form {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1rem;
+    width: min(calc(100% - 2rem), 1080px);
+    margin: 0 auto clamp(3.25rem, 7vw, 5.5rem);
+    padding: clamp(1.4rem, 3.5vw, 2.8rem);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.38), transparent 45%),
+      var(--grades-paper);
+    border: 1px solid var(--grades-line);
+    border-radius: 6px 26px 6px 26px;
+    box-shadow:
+      0 24px 54px var(--grades-shadow),
+      0 0 0 8px rgba(255, 249, 239, 0.22);
+  }
+
+  body:has(> form) > form::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 12px;
+    pointer-events: none;
+    border: 1px solid rgba(91, 108, 87, 0.14);
+    border-radius: 3px 18px 3px 18px;
+  }
+
+  body:has(> form) > form > div {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    grid-column: span 2;
+  }
+
+  body:has(> form) > form > div:first-child {
+    grid-column: 1 / -1;
+  }
+
+  body:has(> form) > form label {
+    display: block;
+    margin-bottom: 0.42rem;
+    color: var(--grades-ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  body:has(> form) > form input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.72rem 0.82rem;
+    color: var(--grades-ink);
+    background: rgba(255, 255, 255, 0.52);
+    border: 1px solid rgba(77, 118, 109, 0.25);
+    border-radius: 4px;
+    font: inherit;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.96rem;
+    outline: none;
+  }
+
+  body:has(> form) > form input::placeholder {
+    color: rgba(104, 118, 110, 0.62);
+  }
+
+  body:has(> form) > form input:hover {
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(77, 118, 109, 0.5);
+  }
+
+  body:has(> form) > form input:focus {
+    background: #fffdf7;
+    border-color: var(--grades-sage);
+    box-shadow: 0 0 0 3px rgba(198, 210, 184, 0.56);
+  }
+
+  body:has(> form) > form > button {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / -1;
+    justify-self: end;
+    min-height: 2.9rem;
+    margin-top: 0.55rem;
+    padding: 0.72rem 1.4rem;
+    cursor: pointer;
+    color: #fffaf0;
+    background: var(--grades-sage);
+    border: 1px solid var(--grades-sage);
+    border-radius: 999px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  body:has(> form) > form > button:hover,
+  body:has(> form) > form > button:focus-visible {
+    background: var(--grades-ink);
+    border-color: var(--grades-ink);
+    transform: translateY(-2px);
+  }
+
+  body:has(> form) > form > button:focus-visible,
+  body:has(> form) > form input:focus-visible,
+  body:has(> form) > table th:focus-visible,
+  body:has(> form) > table td:focus-visible {
+    outline: 3px solid rgba(77, 118, 109, 0.42);
+    outline-offset: 3px;
+  }
+
+  body:has(> form) > h2:nth-of-type(2) {
+    position: relative;
+    padding-top: 1.65rem;
+    margin-top: 0;
+    margin-bottom: 1.4rem;
+    font-size: clamp(1.8rem, 3.4vw, 2.85rem);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+
+  body:has(> form) > h2:nth-of-type(2)::before {
+    content: "02  ·  arquivo vivo";
+    display: block;
+    margin-bottom: 0.62rem;
+    color: var(--grades-sage);
+    font-size: 0.68rem;
+    font-style: normal;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  body:has(> form) > h2:nth-of-type(2)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--grades-line), transparent 78%);
+  }
+
+  body:has(> form) > table {
+    width: min(calc(100% - 2rem), 1080px);
+    margin: 0 auto clamp(3rem, 7vw, 5.5rem);
+    overflow: hidden;
+    border: 1px solid var(--grades-line);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 5px 24px 5px 24px;
+    background: rgba(255, 253, 247, 0.84);
+    box-shadow:
+      0 22px 48px var(--grades-shadow),
+      0 0 0 8px rgba(255, 249, 239, 0.2);
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  body:has(> form) > table thead {
+    color: #fffaf0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent),
+      var(--grades-sage);
+  }
+
+  body:has(> form) > table th {
+    padding: 0.9rem 0.78rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: 0.67rem;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  body:has(> form) > table th:last-child {
+    border-right: 0;
+  }
+
+  body:has(> form) > table tbody tr {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  body:has(> form) > table tbody tr:nth-child(even) {
+    background: rgba(199, 211, 184, 0.16);
+  }
+
+  body:has(> form) > table tbody tr:hover {
+    background: rgba(242, 214, 212, 0.36);
+    transform: translateX(3px);
+  }
+
+  body:has(> form) > table td {
+    padding: 1rem 0.78rem;
+    color: var(--grades-muted);
+    border-top: 1px solid var(--grades-line);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  body:has(> form) > table td:first-child {
+    width: 7%;
+    color: var(--grades-sage);
+    font-style: italic;
+    text-align: center;
+  }
+
+  body:has(> form) > table td:nth-child(2) {
+    min-width: 180px;
+    color: var(--grades-ink);
+  }
+
+  body:has(> form) > table td:nth-child(n + 3) {
+    color: var(--grades-ink);
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    body:has(> form) > h2:first-of-type {
+      width: min(calc(100% - 1.5rem), 1080px);
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+      font-size: clamp(2.35rem, 13vw, 4rem);
+    }
+
+    body:has(> form) > h2:first-of-type::before {
+      font-size: 0.52rem;
+      letter-spacing: 0.13em;
+    }
+
+    body:has(> form) > form {
+      grid-template-columns: 1fr;
+      width: min(calc(100% - 1rem), 1080px);
+      padding: 1.25rem 1rem 1.35rem;
+      border-radius: 4px 18px 4px 18px;
+    }
+
+    body:has(> form) > form > div,
+    body:has(> form) > form > div:first-child {
+      grid-column: auto;
+    }
+
+    body:has(> form) > form > button {
+      width: 100%;
+      margin-top: 0.35rem;
+    }
+
+    body:has(> form) > h2:nth-of-type(2),
+    body:has(> form) > table {
+      width: min(calc(100% - 1rem), 1080px);
+    }
+
+    body:has(> form) > h2:nth-of-type(2) {
+      font-size: clamp(1.75rem, 9vw, 2.5rem);
+    }
+
+    body:has(> form) > table {
+      display: block;
+      overflow-x: auto;
+      border-radius: 4px 16px 4px 16px;
+    }
+
+    body:has(> form) > table thead,
+    body:has(> form) > table tbody {
+      min-width: 760px;
+    }
+
+    body:has(> form) > table th,
+    body:has(> form) > table td {
+      padding: 0.82rem 0.7rem;
+    }
+  }
+}
