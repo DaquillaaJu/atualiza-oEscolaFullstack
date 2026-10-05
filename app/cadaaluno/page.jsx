@@ -1,323 +1,169 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import Header from "../components/header";
 
-const initialStudents = [
-  {
-    id: 1,
-    nome: "Ana Clara Souza",
-    idade: "14",
-    serie: "9º ano",
-    ra: "2026-0148",
-  },
-  {
-    id: 2,
-    nome: "Miguel Oliveira",
-    idade: "13",
-    serie: "8º ano",
-    ra: "2026-0182",
-  },
-  {
-    id: 3,
-    nome: "Lívia Martins",
-    idade: "15",
-    serie: "1º EM",
-    ra: "2026-0225",
-  },
-];
-
-const emptyForm = {
-  nome: "",
-  idade: "",
-  serie: "",
-  ra: "",
-};
-
 export default function CadaAluno() {
-  const [formData, setFormData] = useState(emptyForm);
-  const [students, setStudents] = useState(initialStudents);
-  const [formError, setFormError] = useState("");
-  const [formStatus, setFormStatus] = useState("");
+  const [nome, setNome] = useState("");
+  const [idade, setIdade] = useState("");
+  const [email, setEmail] = useState("");
+  const [serie, setSerie] = useState("");
+  const [ra, setRa] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState(false);
 
-  function handleFieldChange(event) {
-    const { name, value } = event.target;
-
-    setFormData((current) => ({
-      ...current,
-      [name]: value,
-    }));
-
-    if (formError) {
-      setFormError("");
-    }
-
-    if (formStatus) {
-      setFormStatus("");
-    }
-  }
-
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setMensagem("");
+    setErro(false);
+    setSalvando(true);
 
-    const nome = formData.nome.trim();
-    const idade = Number(formData.idade);
-    const serie = formData.serie.trim();
-    const ra = formData.ra.trim();
+    try {
+      const resposta = await fetch("/api/cadaaluno", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, idade, serie, ra }),
+      });
+      const resultado = await resposta.json();
 
-    if (!nome || !formData.idade || !serie || !ra) {
-      setFormStatus("");
-      setFormError("Preencha nome, idade, série e RA para cadastrar o aluno.");
-      return;
+      if (!resposta.ok) {
+        throw new Error(resultado.error || "Não foi possível salvar o aluno.");
+      }
+
+      setMensagem(`Aluno ${nome} cadastrado com sucesso!`);
+      setNome("");
+      setIdade("");
+      setEmail("");
+      setSerie("");
+      setRa("");
+    } catch (error) {
+      setMensagem(error.message || "Não foi possível salvar o aluno.");
+      setErro(true);
+    } finally {
+      setSalvando(false);
     }
-
-    if (!Number.isInteger(idade) || idade < 3 || idade > 25) {
-      setFormStatus("");
-      setFormError("Informe uma idade válida entre 3 e 25 anos.");
-      return;
-    }
-
-    setStudents((current) => [
-      {
-        id: Date.now(),
-        nome,
-        idade: String(idade),
-        serie,
-        ra,
-      },
-      ...current,
-    ]);
-    setFormData(emptyForm);
-    setFormError("");
-    setFormStatus("Aluno cadastrado com sucesso.");
-  }
-
-  function handleStudentChange(studentId, field, value) {
-    setStudents((current) =>
-      current.map((student) =>
-        student.id === studentId ? { ...student, [field]: value } : student,
-      ),
-    );
   }
 
   return (
     <>
       <Header />
-
       <main className="students-page">
         <div className="students-frame">
-          <div className="students-corner students-corner-top" aria-hidden="true" />
-          <div className="students-corner students-corner-bottom" aria-hidden="true" />
+          <span className="students-corner students-corner-top" aria-hidden="true" />
+          <span className="students-corner students-corner-bottom" aria-hidden="true" />
 
           <header className="students-masthead">
-            <span className="students-eyebrow">registro escolar · turma 2026</span>
-            <h1>Cadastro de alunos</h1>
-            <p>
-              Organize os dados da turma com o mesmo cuidado de uma página do nosso
-              caderno escolar.
-            </p>
+            <span className="students-eyebrow">Secretaria escolar</span>
+            <h1>Cadastro de Alunos</h1>
+            <p>Preencha os dados abaixo para realizar o cadastro.</p>
           </header>
 
-          <div className="students-content">
-            <section className="student-form-panel" aria-labelledby="new-student-title">
+          <section className="students-content students-content-form-only" aria-labelledby="student-form-title">
+            <div className="student-form-panel">
               <div className="students-section-kicker">
-                <span>01</span>
-                <span>novo registro</span>
+                <span aria-hidden="true">01</span>
+                Dados do aluno
               </div>
-              <h2 id="new-student-title">Adicionar estudante</h2>
+              <h2 id="student-form-title">Novo cadastro</h2>
               <p className="student-form-intro">
-                Preencha os campos abaixo para incluir uma nova pessoa na lista.
+                Informe os dados do estudante para adicioná-lo ao registro escolar.
               </p>
 
-              <form className="student-form" onSubmit={handleSubmit} noValidate>
+              <form onSubmit={handleSubmit} className="student-form" aria-busy={salvando}>
                 <div className="student-fields">
                   <div className="student-field student-field-wide">
                     <label htmlFor="nome">Nome completo</label>
                     <input
+                      type="text"
                       id="nome"
                       name="nome"
-                      type="text"
-                      value={formData.nome}
-                      onChange={handleFieldChange}
-                      placeholder="Ex.: Helena da Silva"
                       autoComplete="name"
+                      value={nome}
+                      onChange={(event) => setNome(event.target.value)}
+                      placeholder="Nome do aluno"
                       required
+                      disabled={salvando}
                     />
                   </div>
 
                   <div className="student-field">
                     <label htmlFor="idade">Idade</label>
                     <input
+                      type="number"
                       id="idade"
                       name="idade"
-                      type="number"
-                      min="3"
-                      max="25"
-                      value={formData.idade}
-                      onChange={handleFieldChange}
-                      placeholder="14"
+                      min="1"
+                      max="120"
+                      value={idade}
+                      onChange={(event) => setIdade(event.target.value)}
+                      placeholder="Ex.: 12"
                       required
+                      disabled={salvando}
+                    />
+                  </div>
+
+                  <div className="student-field">
+                    <label htmlFor="email">E-mail</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      autoComplete="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="aluno@escola.com"
+                      required
+                      disabled={salvando}
                     />
                   </div>
 
                   <div className="student-field">
                     <label htmlFor="serie">Série</label>
                     <input
+                      type="text"
                       id="serie"
                       name="serie"
-                      type="text"
-                      value={formData.serie}
-                      onChange={handleFieldChange}
-                      placeholder="Ex.: 9º ano"
+                      value={serie}
+                      onChange={(event) => setSerie(event.target.value)}
+                      placeholder="Ex.: 3A"
                       required
+                      disabled={salvando}
                     />
                   </div>
 
-                  <div className="student-field">
-                    <label htmlFor="ra">RA</label>
+                  <div className="student-field student-field-wide">
+                    <label htmlFor="ra">Registro do aluno (RA)</label>
                     <input
+                      type="text"
                       id="ra"
                       name="ra"
-                      type="text"
-                      value={formData.ra}
-                      onChange={handleFieldChange}
-                      placeholder="2026-0000"
+                      value={ra}
+                      onChange={(event) => setRa(event.target.value)}
+                      placeholder="Informe o RA"
                       required
+                      disabled={salvando}
                     />
                   </div>
                 </div>
 
                 <div className="student-form-actions">
-                  <p className="student-form-note">Todos os campos são obrigatórios.</p>
-                  <button type="submit" className="student-submit-button">
-                    cadastrar aluno <span aria-hidden="true">→</span>
+                  <p className="student-form-note">Os campos marcados são obrigatórios.</p>
+                  <button type="submit" className="student-submit-button" disabled={salvando}>
+                    {salvando ? "Salvando…" : "Salvar dados"}
                   </button>
                 </div>
 
-                {formError ? (
-                  <p className="form-feedback form-feedback-error" role="alert">
-                    {formError}
+                {mensagem && (
+                  <p
+                    className={`form-feedback ${erro ? "form-feedback-error" : "form-feedback-success"}`}
+                    role={erro ? "alert" : "status"}
+                  >
+                    {mensagem}
                   </p>
-                ) : null}
-
-                {formStatus ? (
-                  <p className="form-feedback form-feedback-success" role="status" aria-live="polite">
-                    {formStatus}
-                  </p>
-                ) : null}
+                )}
               </form>
-            </section>
-
-            <aside className="students-note" aria-label="Nota sobre o cadastro">
-              <span className="students-note-mark" aria-hidden="true">✽</span>
-              <span className="students-note-label">caderno de chamada</span>
-              <p>
-                Um registro simples para acompanhar quem faz parte da nossa turma e
-                manter cada história no lugar certo.
-              </p>
-              <div className="students-note-line" aria-hidden="true" />
-              <span className="students-note-signature">com cuidado, SESI</span>
-            </aside>
-          </div>
-
-          <section className="students-list-section" aria-labelledby="students-list-title">
-            <div className="students-list-heading">
-              <div>
-                <div className="students-section-kicker">
-                  <span>02</span>
-                  <span>arquivo vivo</span>
-                </div>
-                <h2 id="students-list-title">Alunos cadastrados</h2>
-                <p className="students-list-help">
-                  Edite os dados diretamente na tabela sempre que precisar atualizar a turma.
-                </p>
-              </div>
-              <span className="student-count" aria-label={`${students.length} alunos cadastrados`}>
-                {students.length} {students.length === 1 ? "aluno" : "alunos"}
-              </span>
             </div>
-
-            {students.length ? (
-              <div className="students-table-wrap">
-                <table className="students-table">
-                  <caption className="sr-only">Lista editável de alunos</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Nome</th>
-                      <th scope="col">Idade</th>
-                      <th scope="col">Série</th>
-                      <th scope="col">RA</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.map((student) => (
-                      <tr key={student.id}>
-                        <td data-label="Nome">
-                          <label className="sr-only" htmlFor={`student-${student.id}-nome`}>
-                            Nome do aluno
-                          </label>
-                          <input
-                            id={`student-${student.id}-nome`}
-                            type="text"
-                            value={student.nome}
-                            aria-label={`Nome do aluno ${student.nome}`}
-                            onChange={(event) =>
-                              handleStudentChange(student.id, "nome", event.target.value)
-                            }
-                          />
-                        </td>
-                        <td data-label="Idade">
-                          <label className="sr-only" htmlFor={`student-${student.id}-idade`}>
-                            Idade de {student.nome}
-                          </label>
-                          <input
-                            id={`student-${student.id}-idade`}
-                            type="number"
-                            min="3"
-                            max="25"
-                            value={student.idade}
-                            aria-label={`Idade de ${student.nome}`}
-                            onChange={(event) =>
-                              handleStudentChange(student.id, "idade", event.target.value)
-                            }
-                          />
-                        </td>
-                        <td data-label="Série">
-                          <label className="sr-only" htmlFor={`student-${student.id}-serie`}>
-                            Série de {student.nome}
-                          </label>
-                          <input
-                            id={`student-${student.id}-serie`}
-                            type="text"
-                            value={student.serie}
-                            aria-label={`Série de ${student.nome}`}
-                            onChange={(event) =>
-                              handleStudentChange(student.id, "serie", event.target.value)
-                            }
-                          />
-                        </td>
-                        <td data-label="RA">
-                          <label className="sr-only" htmlFor={`student-${student.id}-ra`}>
-                            RA de {student.nome}
-                          </label>
-                          <input
-                            id={`student-${student.id}-ra`}
-                            type="text"
-                            value={student.ra}
-                            aria-label={`RA de ${student.nome}`}
-                            onChange={(event) =>
-                              handleStudentChange(student.id, "ra", event.target.value)
-                            }
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="students-empty-state">Nenhum aluno cadastrado ainda.</p>
-            )}
           </section>
         </div>
       </main>

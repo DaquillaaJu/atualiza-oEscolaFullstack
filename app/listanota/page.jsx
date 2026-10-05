@@ -1,159 +1,232 @@
 'use client';
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Header from "../components/header";
 
+const CAMPOS_NOTA = [
+  { id: "t1", label: "Trabalho 1 (T1)" },
+  { id: "t2", label: "Trabalho 2 (T2)" },
+  { id: "t3", label: "Trabalho 3 (T3)" },
+  { id: "n1", label: "Nota 1 (N1)" },
+  { id: "n2", label: "Nota 2 (N2)" },
+  { id: "n3", label: "Nota 3 (N3)" },
+];
+
+const NOTA_VAZIA = { id_aluno: "", t1: "", t2: "", t3: "", n1: "", n2: "", n3: "" };
+
 export default function NotaAluno() {
-    const [nomeAluno, setNomeAluno] = useState("");
-    const [t1, setT1] = useState("");
-    const [t2, setT2] = useState("");
-    const [n1, setN1] = useState("");
-    const [n2, setN2] = useState("");
-    const [n3, setN3] = useState("");
+  const [alunos, setAlunos] = useState([]);
+  const [notas, setNotas] = useState([]);
+  const [rascunho, setRascunho] = useState(NOTA_VAZIA);
+  const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState("");
 
-    const [notas, setNotas] = useState([
-        {
-            id: 1,
-            nomeAluno: "Julia Daquila",
-            t1: 8.5,
-            t2: 9.0,
-            n1: 7.0,
-            n2: 8.0,
-            n3: 9.5,
-        },
-    ]);
+  const carregarDados = useCallback(async () => {
+    try {
+      const [respostaAlunos, respostaNotas] = await Promise.all([
+        fetch("/api/cadaaluno"),
+        fetch("/api/alunos"),
+      ]);
+      const [dadosAlunos, dadosNotas] = await Promise.all([
+        respostaAlunos.json(),
+        respostaNotas.json(),
+      ]);
 
-    function handleSubmit(e) {
-        e.preventDefault();
+      if (!respostaAlunos.ok) {
+        throw new Error(dadosAlunos.error || "Não foi possível carregar os alunos.");
+      }
+      if (!respostaNotas.ok) {
+        throw new Error(dadosNotas.error || "Não foi possível carregar as notas.");
+      }
 
-        if (!nomeAluno) {
-            alert("Informe o nome do aluno.");
-            return;
+      setAlunos(dadosAlunos.alunos);
+      setNotas(dadosNotas.notas);
+      setErro("");
+    } catch (error) {
+      setErro(error.message || "Não foi possível carregar os dados.");
+    } finally {
+      setCarregando(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarInicial() {
+      try {
+        const [respostaAlunos, respostaNotas] = await Promise.all([
+          fetch("/api/cadaaluno"),
+          fetch("/api/alunos"),
+        ]);
+        const [dadosAlunos, dadosNotas] = await Promise.all([
+          respostaAlunos.json(),
+          respostaNotas.json(),
+        ]);
+
+        if (!respostaAlunos.ok) {
+          throw new Error(dadosAlunos.error || "Não foi possível carregar os alunos.");
+        }
+        if (!respostaNotas.ok) {
+          throw new Error(dadosNotas.error || "Não foi possível carregar as notas.");
         }
 
-        const novaNota = {
-            id: notas.length + 1,
-            nomeAluno,
-            t1,
-            t2,
-            n1,
-            n2,
-            n3,
-        };
-
-        setNotas([...notas, novaNota]);
-
-        // limpa o formulário
-        setNomeAluno("");
-        setT1("");
-        setT2("");
-        setN1("");
-        setN2("");
-        setN3("");
+        if (ativo) {
+          setAlunos(dadosAlunos.alunos);
+          setNotas(dadosNotas.notas);
+          setErro("");
+        }
+      } catch (error) {
+        if (ativo) setErro(error.message || "Não foi possível carregar os dados.");
+      } finally {
+        if (ativo) setCarregando(false);
+      }
     }
 
-    return (
-        <>
-            <Header />
-            <h2>Lançamento de Notas</h2>
+    carregarInicial();
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Nome do Aluno</label>
-                    <input
-                        type="text"
-                        value={nomeAluno}
-                        onChange={(e) => setNomeAluno(e.target.value)}
-                        placeholder="Nome do aluno"
-                    />
-                </div>
+  function atualizarCampo(campo, valor) {
+    setRascunho((atual) => ({ ...atual, [campo]: valor }));
+  }
 
-                <div>
-                    <label>Trabalho 1 (T1)</label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={t1}
-                        onChange={(e) => setT1(e.target.value)}
-                        placeholder="T1"
-                    />
-                </div>
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setSalvando(true);
+    setErro("");
+    setMensagem("");
 
-                <div>
-                    <label>Trabalho 2 (T2)</label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={t2}
-                        onChange={(e) => setT2(e.target.value)}
-                        placeholder="T2"
-                    />
-                </div>
+    const dados = {
+      id_aluno: Number(rascunho.id_aluno),
+      t1: Number(rascunho.t1),
+      t2: Number(rascunho.t2),
+      t3: Number(rascunho.t3),
+      n1: Number(rascunho.n1),
+      n2: Number(rascunho.n2),
+      n3: Number(rascunho.n3),
+    };
 
-                <div>
-                    <label>Nota 1 (N1)</label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={n1}
-                        onChange={(e) => setN1(e.target.value)}
-                        placeholder="N1"
-                    />
-                </div>
+    try {
+      const resposta = await fetch("/api/alunos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados),
+      });
+      const resultado = await resposta.json();
 
-                <div>
-                    <label>Nota 2 (N2)</label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={n2}
-                        onChange={(e) => setN2(e.target.value)}
-                        placeholder="N2"
-                    />
-                </div>
+      if (!resposta.ok) {
+        throw new Error(resultado.error || "Não foi possível salvar a nota.");
+      }
 
-                <div>
-                    <label>Nota 3 (N3)</label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={n3}
-                        onChange={(e) => setN3(e.target.value)}
-                        placeholder="N3"
-                    />
-                </div>
+      setRascunho(NOTA_VAZIA);
+      setMensagem("Nota salva com sucesso.");
+      await carregarDados();
+    } catch (error) {
+      setErro(error.message || "Não foi possível salvar a nota.");
+    } finally {
+      setSalvando(false);
+    }
+  }
 
-                <button type="submit">Salvar Nota</button>
-            </form>
+  return (
+    <>
+      <Header />
+      <h2>Lançamento de Notas</h2>
 
-            <h2>Notas Lançadas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>T1</th>
-                        <th>T2</th>
-                        <th>N1</th>
-                        <th>N2</th>
-                        <th>N3</th>
-                    </tr>
-                </thead>
+      {erro && <p role="alert">{erro}</p>}
+      {mensagem && <p role="status">{mensagem}</p>}
 
-                <tbody>
-                    {notas.map((nota) => (
-                        <tr key={nota.id}>
-                            <td>{nota.id}</td>
-                            <td>{nota.nomeAluno}</td>
-                            <td>{nota.t1}</td>
-                            <td>{nota.t2}</td>
-                            <td>{nota.n1}</td>
-                            <td>{nota.n2}</td>
-                            <td>{nota.n3}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
-    );
+      {alunos.length === 0 && !carregando && !erro && (
+        <p role="status">Cadastre um aluno antes de lançar notas.</p>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="id_aluno">Aluno</label>
+          <select
+            id="id_aluno"
+            name="id_aluno"
+            value={rascunho.id_aluno}
+            onChange={(event) => atualizarCampo("id_aluno", event.target.value)}
+            required
+            disabled={carregando || alunos.length === 0 || salvando}
+          >
+            <option value="" disabled>Selecione um aluno</option>
+            {alunos.map((aluno) => (
+              <option key={aluno.id_aluno} value={aluno.id_aluno}>
+                {aluno.nome} — RA {aluno.ra}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {CAMPOS_NOTA.map(({ id, label }) => (
+          <div key={id}>
+            <label htmlFor={id}>{label}</label>
+            <input
+              id={id}
+              name={id}
+              type="number"
+              min="0"
+              max="10"
+              step="0.1"
+              value={rascunho[id]}
+              onChange={(event) => atualizarCampo(id, event.target.value)}
+              placeholder={id.toUpperCase()}
+              required
+              disabled={salvando}
+            />
+          </div>
+        ))}
+
+        <button type="submit" disabled={salvando || carregando || alunos.length === 0}>
+          {salvando ? "Salvando…" : "Salvar Nota"}
+        </button>
+      </form>
+
+      <h2>Notas Lançadas</h2>
+      {carregando ? (
+        <p role="status">Carregando dados…</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nome</th>
+              <th scope="col">T1</th>
+              <th scope="col">T2</th>
+              <th scope="col">T3</th>
+              <th scope="col">N1</th>
+              <th scope="col">N2</th>
+              <th scope="col">N3</th>
+            </tr>
+          </thead>
+          <tbody>
+            {notas.length > 0 ? notas.map((nota) => (
+              <tr key={nota.id}>
+                <td>{nota.id}</td>
+                <td>{nota.nome}</td>
+                <td>{nota.t1}</td>
+                <td>{nota.t2}</td>
+                <td>{nota.t3}</td>
+                <td>{nota.n1}</td>
+                <td>{nota.n2}</td>
+                <td>{nota.n3}</td>
+              </tr>
+            )) : (
+              <tr>
+                <td colSpan={8}>
+                  {erro ? "Não foi possível carregar as notas." : "Nenhuma nota lançada."}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      )}
+    </>
+  );
 }

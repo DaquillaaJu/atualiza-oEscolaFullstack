@@ -1274,6 +1274,15 @@ a {
     min-width: 0;
   }
 
+  .students-content-form-only {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .students-content-form-only .student-form-panel {
+    width: min(100%, 780px);
+    margin: 0 auto;
+  }
+
   .students-section-kicker {
     display: flex;
     align-items: center;
@@ -1343,6 +1352,11 @@ a {
     font-size: 0.78rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .student-field label::after {
+    content: " *";
+    color: var(--students-pink);
   }
 
   .student-field input,
@@ -1417,10 +1431,15 @@ a {
     text-transform: lowercase;
   }
 
-  .student-submit-button:hover {
+  .student-submit-button:hover:not(:disabled) {
     background: var(--students-ink-deep);
     border-color: var(--students-ink-deep);
     transform: translateY(-2px);
+  }
+
+  .student-submit-button:disabled {
+    cursor: wait;
+    opacity: 0.72;
   }
 
   .student-submit-button span {
@@ -1815,6 +1834,50 @@ body:has(> table) > h2::after {
   background: linear-gradient(90deg, transparent, var(--list-line), transparent);
 }
 
+body:has(> table) .student-search-row {
+  display: flex;
+  justify-content: flex-end;
+  width: min(calc(100% - 2rem), 940px);
+  margin: -1rem auto 1rem;
+}
+
+body:has(> table) .student-search-field {
+  display: flex;
+  width: min(100%, 19rem);
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+body:has(> table) .student-search-field label {
+  color: var(--list-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+body:has(> table) .student-search-field input {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.62rem 0.8rem;
+  color: var(--list-ink);
+  background: rgba(255, 253, 247, 0.88);
+  border: 1px solid var(--list-line);
+  border-radius: 5px;
+  font: inherit;
+}
+
+body:has(> table) .student-search-field input:focus-visible {
+  outline: 3px solid rgba(77, 118, 109, 0.38);
+  outline-offset: 2px;
+}
+
+body:has(> table) .student-search-help {
+  color: var(--list-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.72rem;
+}
+
 body:has(> table) > table {
   position: relative;
   width: min(calc(100% - 2rem), 940px);
@@ -2145,6 +2208,15 @@ body:has(> main.page-shell > .hero-panel) a:focus-visible {
 }
 
 @media (max-width: 680px) {
+  body:has(> table) .student-search-row {
+    width: min(calc(100% - 1rem), 940px);
+    margin-top: -0.5rem;
+  }
+
+  body:has(> table) .student-search-field {
+    width: 100%;
+  }
+
   body:has(> table) > h2 {
     width: min(calc(100% - 1.5rem), 940px);
     margin-top: 3rem;
@@ -2357,7 +2429,8 @@ body:has(> main.page-shell > .hero-panel) a:focus-visible {
     text-transform: uppercase;
   }
 
-  body:has(> form) > form input {
+  body:has(> form) > form input,
+  body:has(> form) > form select {
     width: 100%;
     min-height: 3rem;
     padding: 0.72rem 0.82rem;
@@ -2375,12 +2448,14 @@ body:has(> main.page-shell > .hero-panel) a:focus-visible {
     color: rgba(104, 118, 110, 0.62);
   }
 
-  body:has(> form) > form input:hover {
+  body:has(> form) > form input:hover,
+  body:has(> form) > form select:hover {
     background: rgba(255, 255, 255, 0.72);
     border-color: rgba(77, 118, 109, 0.5);
   }
 
-  body:has(> form) > form input:focus {
+  body:has(> form) > form input:focus,
+  body:has(> form) > form select:focus {
     background: #fffdf7;
     border-color: var(--grades-sage);
     box-shadow: 0 0 0 3px rgba(198, 210, 184, 0.56);
@@ -2408,15 +2483,21 @@ body:has(> main.page-shell > .hero-panel) a:focus-visible {
     transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
-  body:has(> form) > form > button:hover,
-  body:has(> form) > form > button:focus-visible {
+  body:has(> form) > form > button:hover:not(:disabled),
+  body:has(> form) > form > button:focus-visible:not(:disabled) {
     background: var(--grades-ink);
     border-color: var(--grades-ink);
     transform: translateY(-2px);
   }
 
+  body:has(> form) > form > button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
   body:has(> form) > form > button:focus-visible,
   body:has(> form) > form input:focus-visible,
+  body:has(> form) > form select:focus-visible,
   body:has(> form) > table th:focus-visible,
   body:has(> form) > table td:focus-visible {
     outline: 3px solid rgba(77, 118, 109, 0.42);
@@ -2585,5 +2666,83 @@ body:has(> main.page-shell > .hero-panel) a:focus-visible {
     body:has(> form) > table td {
       padding: 0.82rem 0.7rem;
     }
+  }
+}
+
+/* Ações da tabela de alunos, usando os tokens já definidos para a lista. */
+body:has(> table) .student-actions-cell {
+  min-width: 190px;
+}
+
+body:has(> table) .student-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+body:has(> table) .student-action-button {
+  min-height: 2.15rem;
+  padding: 0.42rem 0.72rem;
+  cursor: pointer;
+  border: 1px solid var(--list-line);
+  border-radius: 999px;
+  color: var(--list-ink);
+  background: rgba(255, 253, 247, 0.72);
+  font: inherit;
+  font-size: 0.78rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+body:has(> table) .student-edit-action {
+  color: #fffaf0;
+  background: var(--list-sage);
+  border-color: var(--list-sage);
+}
+
+body:has(> table) .student-delete-action {
+  background: var(--list-pink);
+}
+
+body:has(> table) .student-action-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+body:has(> table) .student-edit-action:hover:not(:disabled) {
+  background: var(--list-ink);
+  border-color: var(--list-ink);
+}
+
+body:has(> table) .student-delete-action:hover:not(:disabled) {
+  background: #ecc3c1;
+}
+
+body:has(> table) .student-action-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+body:has(> table) .student-action-button:focus-visible,
+body:has(> table) input:focus-visible {
+  outline: 3px solid rgba(77, 118, 109, 0.45);
+  outline-offset: 2px;
+}
+
+body:has(> table) .student-list-feedback,
+body:has(> table) .student-list-state {
+  width: min(calc(100% - 2rem), 940px);
+  margin: 0 auto 1rem;
+  color: var(--list-muted);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body:has(> table) .student-list-state {
+  text-align: center;
+}
+
+@media (max-width: 680px) {
+  body:has(> table) .student-list-feedback,
+  body:has(> table) .student-list-state {
+    width: min(calc(100% - 1rem), 940px);
   }
 }
